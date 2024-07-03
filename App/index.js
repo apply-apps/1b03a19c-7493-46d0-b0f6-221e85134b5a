@@ -1,53 +1,83 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// Filename: index.js
+// Combined code from all files
 
-const App = () => {
-  const fullText = 'Hi, this is Apply.\nCreating mobile apps is now as simple as typing text.\nJust input your idea and press APPLY, and our platform does the rest...';
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, View, Button } from 'react-native';
 
-  useEffect(() => {
-    if (isPaused) return;
+// BasicMath Component
+const getRandomNumber = () => Math.floor(Math.random() * 10) + 1;
 
-    const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + fullText[index]);
-      setIndex((prev) => {
-        if (prev === fullText.length - 1) {
-          setIsPaused(true);
-          setTimeout(() => {
-            setDisplayedText('');
-            setIndex(0);
-            setIsPaused(false);
-          }, 2000);
-          return 0;
-        }
-        return prev + 1;
-      });
-    }, 100);
+const BasicMath = () => {
+    const [num1, setNum1] = useState(getRandomNumber());
+    const [num2, setNum2] = useState(getRandomNumber());
+    const [result, setResult] = useState(null);
 
-    return () => clearInterval(interval);
-  }, [index, isPaused]);
+    const handleAddition = () => {
+        setResult(num1 + num2);
+    };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{displayedText}</Text>
-    </View>
-  );
+    const handleSubtraction = () => {
+        setResult(num1 - num2);
+    };
+
+    const handleMultiplication = () => {
+        setResult(num1 * num2);
+    };
+
+    return (
+        <View style={styles.gameContainer}>
+            <Text style={styles.mathPrompt}>{`${num1} + ${num2} = ?`}</Text>
+            <Button title="Add" color="#8E44AD" onPress={handleAddition} />
+            <Text style={styles.mathPrompt}>{`${num1} - ${num2} = ?`}</Text>
+            <Button title="Subtract" color="#2980B9" onPress={handleSubtraction} />
+            <Text style={styles.mathPrompt}>{`${num1} * ${num2} = ?`}</Text>
+            <Button title="Multiply" color="#27AE60" onPress={handleMultiplication} />
+            {result !== null && <Text style={styles.result}>Result: {result}</Text>}
+        </View>
+    );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'black',
-    padding: 20,
-  },
-  text: {
-    color: 'white',
-    fontSize: 24,
-    fontFamily: 'monospace',
-  },
-});
+// App Component
+export default function App() {
+    return (
+        <SafeAreaView style={styles.container}>
+            <Text style={styles.title}>Playful Math for Kids</Text>
+            <BasicMath />
+        </SafeAreaView>
+    );
+}
 
-export default App;
+// Styles
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        marginTop: 20,
+        alignItems: 'center',
+        backgroundColor: '#FFEC99',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#FF6F61',
+        marginBottom: 20,
+    },
+    gameContainer: {
+        backgroundColor: '#FFFFFF',
+        padding: 20,
+        borderRadius: 10,
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+        marginBottom: 20,
+    },
+    mathPrompt: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#34495E',
+        marginBottom: 10,
+    },
+    result: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#E74C3C',
+        marginTop: 20,
+    },
+});
